@@ -66,7 +66,7 @@ class AlertingSendGridClient(AlertingClient):
 
     def send_alert(self, title: str, message: str):
         sg = sendgrid.SendGridAPIClient(
-            apikey="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")
+            apikey=self.api_key)
         from_email_ = Email(self.from_email)
         to_email_ = Email(self.target_email)
         content = Content('text/html', message)
