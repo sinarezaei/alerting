@@ -26,9 +26,11 @@ class AlertingSlackClient(AlertingClient):
 
 class AlertingMailGunClient(AlertingClient):
 
-    def __init__(self, api_key: str, from_email: str, target_email: Union[str,List[str]]):
+    def __init__(self, api_key: str, domain: str, from_email: str, target_email: Union[str,List[str]]):
         assert api_key is not None, 'Null api key passed for MailGun Client'
         assert isinstance(api_key, str), 'Invalid api key passed for MailGun Client, needed str but found ' + str(type(api_key))
+        assert domain is not None, 'Null domain passed for MailGun Client'
+        assert isinstance(domain, str), 'Invalid domain passed for MailGun Client, needed str but found ' + str(type(api_key))
         assert from_email is not None, 'Null from email passed for MailGun Client'
         assert isinstance(from_email, str), 'Invalid from email passed for MailGun Client, needed str but found ' + str(type(from_email))
         assert target_email is not None, 'Null target email passed for MailGun Client'
@@ -38,12 +40,13 @@ class AlertingMailGunClient(AlertingClient):
                 assert isinstance(target, str), 'Invalid email passed to MailGun Client, needed str but found ' + str(type(target))
         super().__init__()
         self.api_key = api_key
+        self.domain = domain
         self.from_email = from_email
         self.target_email = target_email
 
     def send_alert(self, title: str, message: str):
         return requests.post(
-            "https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages",
+            "https://api.mailgun.net/v3/" + self.domain + "/messages",
             auth=("api", self.api_key),
             data={"from": self.from_email,
                   "to": self.target_email if isinstance(self.target_email, list) else [self.target_email],
