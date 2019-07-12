@@ -44,7 +44,7 @@ class AlertingMailGunClient(AlertingClient):
     def send_alert(self, title: str, message: str):
         return requests.post(
             "https://api.mailgun.net/v3/YOUR_DOMAIN_NAME/messages",
-            auth=("api", "YOUR_API_KEY"),
+            auth=("api", self.api_key),
             data={"from": self.from_email,
                   "to": self.target_email if isinstance(self.target_email, list) else [self.target_email],
                   "subject": title,
