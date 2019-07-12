@@ -4,6 +4,7 @@ import requests
 from slackclient import SlackClient
 import sendgrid
 from sendgrid.helpers.mail import Content, Mail, Email
+from telegram import Bot
 
 
 class AlertingSlackClient(AlertingClient):
@@ -56,12 +57,12 @@ class AlertingMailGunClient(AlertingClient):
 
 class AlertingSendGridClient(AlertingClient):
     def __init__(self, api_key: str, from_email: str, target_email: str):
-        assert api_key is not None, 'Null api key passed for MailGun Client'
-        assert isinstance(api_key, str), 'Invalid api key passed for MailGun Client, needed str but found ' + str(type(api_key))
-        assert from_email is not None, 'Null from email passed for MailGun Client'
-        assert isinstance(from_email, str), 'Invalid from email passed for MailGun Client, needed str but found ' + str(type(from_email))
-        assert target_email is not None, 'Null target email passed for MailGun Client'
-        assert isinstance(target_email, str), 'Invalid target email passed for MailGun client, needed str but found ' + str(type(from_email))
+        assert api_key is not None, 'Null api key passed for SendGrid Client'
+        assert isinstance(api_key, str), 'Invalid api key passed for SendGrid Client, needed str but found ' + str(type(api_key))
+        assert from_email is not None, 'Null from email passed for SendGrid Client'
+        assert isinstance(from_email, str), 'Invalid from email passed for SendGrid Client, needed str but found ' + str(type(from_email))
+        assert target_email is not None, 'Null target email passed for SendGrid Client'
+        assert isinstance(target_email, str), 'Invalid target email passed for SendGrid client, needed str but found ' + str(type(from_email))
         super().__init__()
         self.api_key = api_key
         self.from_email = from_email
@@ -75,3 +76,21 @@ class AlertingSendGridClient(AlertingClient):
         content = Content('text/html', message)
         mail = Mail(from_email=from_email_, subject=title, to_email=to_email_, content=content)
         response = sg.client.mail.send.post(request_body=mail.get())
+
+
+class AlertingTelegramClient(AlertingClient):
+    def __init__(self, token: str, chat_id: str):
+        assert token is not None, 'Null token passed for Telegram Client'
+        assert isinstance(token, str), 'Invalid token passed for Telegram Client, needed str but found ' + str(type(token))
+        assert chat_id is not None, 'Null chat id passed for Telegram Client'
+        assert isinstance(chat_id, str), 'Invalid chat id passed for Telegram Client, needed str but found ' + str(type(chat_id))
+        super().__init__()
+        self.token = token
+        self.chat_id = chat_id
+
+    def send_alert(self, title: str, message: str):
+        telegram_bot = Bot(token=self.token)
+        full_message = 'Title: ' + title + '\n' + message
+        telegram_bot.send_message(
+            chat_id=self.chat_id,
+            text=full_message)
