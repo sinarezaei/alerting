@@ -13,6 +13,7 @@ pip install alerting
 ```
 
 ## Sample
+
 ```python
 from alerting import Alerting
 from alerting.clients import AlertingMailGunClient, AlertingSlackClient, AlertingTelegramClient
