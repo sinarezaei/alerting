@@ -2,8 +2,8 @@ from . import AlertingClient
 from typing import List, Union
 import requests
 from slackclient import SlackClient
-import sendgrid
-from sendgrid.helpers.mail import Content, Mail, Email
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 from telegram import Bot
 
 
@@ -69,13 +69,14 @@ class AlertingSendGridClient(AlertingClient):
         self.target_email = target_email
 
     def send_alert(self, title: str, message: str):
-        sg = sendgrid.SendGridAPIClient(
-            apikey=self.api_key)
-        from_email_ = Email(self.from_email)
-        to_email_ = Email(self.target_email)
-        content = Content('text/html', message)
-        mail = Mail(from_email=from_email_, subject=title, to_email=to_email_, content=content)
-        response = sg.client.mail.send.post(request_body=mail.get())
+        sg = SendGridAPIClient(api_key=self.api_key)
+        message = Mail(
+            from_email=self.from_email,
+            to_emails=self.target_email,
+            subject=title,
+            html_content=message)
+        response = sg.send(message)
+        return response
 
 
 class AlertingTelegramClient(AlertingClient):
