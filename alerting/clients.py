@@ -154,15 +154,15 @@ class AlertingSendGridClient(AlertingClient):
         self.api_key = api_key
         self.from_email = from_email
         self.target_email = target_email
+        self.sg = SendGridAPIClient(api_key=self.api_key)
 
     def send_alert(self, title: str, message: str):
-        sg = SendGridAPIClient(api_key=self.api_key)
         message = Mail(
             from_email=self.from_email,
             to_emails=self.target_email,
             subject=title,
             html_content=message)
-        response = sg.send(message)
+        response = self.sg.send(message)
         return response
 
 
@@ -175,10 +175,10 @@ class AlertingTelegramClient(AlertingClient):
         super().__init__()
         self.token = token
         self.chat_id = chat_id
+        self.telegram_bot = Bot(token=self.token)
 
     def send_alert(self, title: str, message: str):
-        telegram_bot = Bot(token=self.token)
         full_message = 'Title: ' + title + '\n' + message
-        telegram_bot.send_message(
+        self.telegram_bot.send_message(
             chat_id=self.chat_id,
             text=full_message)
