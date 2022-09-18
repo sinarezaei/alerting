@@ -259,8 +259,6 @@ class AlertingTelegramClient(AlertingClient):
         self.bot_token = bot_token
         self.chat_id = chat_id
         self.telegram_bot = Bot(token=self.token)
-
-    def send_alert(self, title: str, message: str):
         self.proxy_url = proxy_url
         if self.proxy_url:
             request_kwargs = {
