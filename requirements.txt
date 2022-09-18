@@ -1,6 +1,6 @@
 python_http_client==3.1.0
 typing==3.6.2
 python_telegram_bot==8.0
-slackclient==1.0.2
+slackclient==2.8.1
 sendgrid==6.0.5
 requests==2.21.1
