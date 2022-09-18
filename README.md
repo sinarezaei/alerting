@@ -5,7 +5,7 @@
 Easy to use alerting library for Python 3+
 
 Tested with:
-* Python 3.6+
+* Python 3.6-3.10
 
 Use the following command to install using pip:
 ```
@@ -18,7 +18,7 @@ pip install alerting
 from alerting import Alerting
 from alerting.clients import AlertingMailGunClient, AlertingSlackClient, AlertingTelegramClient
 
-alerts = Alerting(
+my_alerts = Alerting(
   clients=[
     AlertingSendGridClient(sendgrid_api_key, from_email),
     AlertingMailGunClient(your_mailgun_api_key, your_domain, from_email, target_email),
@@ -31,7 +31,7 @@ alerts = Alerting(
 try:
   # something
 except Exception as ex:
-  alerting.send_alert(title='some bad error happened', message=str(ex))
+  my_alerts.send_alert(title='some bad error happened', message=str(ex))
 
 ```
 
