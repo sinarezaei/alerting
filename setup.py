@@ -7,7 +7,7 @@ with open('requirements.txt') as f:
     required = f.read().splitlines()
 
 setuptools.setup(name='alerting',
-                 version='0.0.9.2',
+                 version='0.0.9.3',
                  author='Sina Rezaei',
                  author_email='sinarezaei1991@gmail.com',
                  long_description_content_type="text/markdown",
