@@ -3,4 +3,4 @@ typing==3.6.2
 python_telegram_bot==13.14
 # slackclient==2.8.1
 sendgrid==6.0.5
-requests==2.28.1
+requests==2.31.0
